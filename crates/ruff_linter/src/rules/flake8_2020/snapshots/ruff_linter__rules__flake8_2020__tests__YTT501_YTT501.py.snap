@@ -1,0 +1,32 @@
+---
+source: crates/ruff_linter/src/rules/flake8_2020/mod.rs
+---
+YTT501.py:6:7: YTT501 `sys.version[:5]` referenced (python3.1000), use `sys.version_info`
+  |
+4 | print(sys.version)
+5 | 
+6 | print(sys.version[:5])
+  |       ^^^^^^^^^^^ YTT501
+7 | print(version[:5])
+8 | print(v[:5])
+  |
+
+YTT501.py:7:7: YTT501 `sys.version[:5]` referenced (python3.1000), use `sys.version_info`
+  |
+6 | print(sys.version[:5])
+7 | print(version[:5])
+  |       ^^^^^^^ YTT501
+8 | print(v[:5])
+  |
+
+YTT501.py:8:7: YTT501 `sys.version[:5]` referenced (python3.1000), use `sys.version_info`
+   |
+ 6 | print(sys.version[:5])
+ 7 | print(version[:5])
+ 8 | print(v[:5])
+   |       ^ YTT501
+ 9 | 
+10 | # the tool is timid and only flags certain numeric slices
+   |
+
+

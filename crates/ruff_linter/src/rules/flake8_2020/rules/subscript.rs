@@ -48,6 +48,86 @@ impl Violation for SysVersionSlice3 {
 }
 
 /// ## What it does
+/// Checks for uses of `sys.version[:4]`.
+///
+/// ## Why is this bad?
+/// If the current major or minor version consists of multiple digits,
+/// `sys.version[:4]` will truncate the version number (e.g., `"3.100"` would
+/// become `"3.10"`). This is likely unintended, and can lead to subtle bugs if
+/// the version string is used to test against a specific Python version.
+///
+/// Instead, use `sys.version_info` to access the current major and minor
+/// version numbers as a tuple, which can be compared to other tuples
+/// without issue.
+///
+/// ## Example
+/// ```python
+/// import sys
+///
+/// sys.version[:4]  # Evaluates to "3.10" on Python 3.100.
+/// ```
+///
+/// Use instead:
+/// ```python
+/// import sys
+///
+/// sys.version_info[:2]  # Evaluates to (3, 100) on Python 3.100.
+/// ```
+///
+/// ## References
+/// - [Python documentation: `sys.version`](https://docs.python.org/3/library/sys.html#sys.version)
+/// - [Python documentation: `sys.version_info`](https://docs.python.org/3/library/sys.html#sys.version_info)
+#[violation]
+pub struct SysVersionSlice4;
+
+impl Violation for SysVersionSlice4 {
+    #[derive_message_formats]
+    fn message(&self) -> String {
+        format!("`sys.version[:4]` referenced (python3.100), use `sys.version_info`")
+    }
+}
+
+/// ## What it does
+/// Checks for uses of `sys.version[:5]`.
+///
+/// ## Why is this bad?
+/// If the current major or minor version consists of multiple digits,
+/// `sys.version[:5]` will truncate the version number (e.g., `"3.1000"` would
+/// become `"3.100"`). This is likely unintended, and can lead to subtle bugs if
+/// the version string is used to test against a specific Python version.
+///
+/// Instead, use `sys.version_info` to access the current major and minor
+/// version numbers as a tuple, which can be compared to other tuples
+/// without issue.
+///
+/// ## Example
+/// ```python
+/// import sys
+///
+/// sys.version[:5]  # Evaluates to "3.100" on Python 3.1000.
+/// ```
+///
+/// Use instead:
+/// ```python
+/// import sys
+///
+/// sys.version_info[:2]  # Evaluates to (3, 1000) on Python 3.1000.
+/// ```
+///
+/// ## References
+/// - [Python documentation: `sys.version`](https://docs.python.org/3/library/sys.html#sys.version)
+/// - [Python documentation: `sys.version_info`](https://docs.python.org/3/library/sys.html#sys.version_info)
+#[violation]
+pub struct SysVersionSlice5;
+
+impl Violation for SysVersionSlice5 {
+    #[derive_message_formats]
+    fn message(&self) -> String {
+        format!("`sys.version[:5]` referenced (python3.1000), use `sys.version_info`")
+    }
+}
+
+/// ## What it does
 /// Checks for uses of `sys.version[2]`.
 ///
 /// ## Why is this bad?
@@ -167,7 +247,7 @@ impl Violation for SysVersionSlice1 {
     }
 }
 
-/// YTT101, YTT102, YTT301, YTT303
+/// YTT101, YTT102, YTT301, YTT303, YTT401, YTT501
 pub(crate) fn subscript(checker: &mut Checker, value: &Expr, slice: &Expr) {
     if is_sys(value, "version", checker.semantic()) {
         match slice {
@@ -190,6 +270,14 @@ pub(crate) fn subscript(checker: &mut Checker, value: &Expr, slice: &Expr) {
                         checker
                             .diagnostics
                             .push(Diagnostic::new(SysVersionSlice3, value.range()));
+                    } else if *i == 4 && checker.enabled(Rule::SysVersionSlice4) {
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(SysVersionSlice4, value.range()));
+                    } else if *i == 5 && checker.enabled(Rule::SysVersionSlice5) {
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(SysVersionSlice5, value.range()));
                     }
                 }
             }

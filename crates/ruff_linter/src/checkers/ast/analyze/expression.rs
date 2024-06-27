@@ -112,6 +112,8 @@ pub(crate) fn expression(expr: &Expr, checker: &mut Checker) {
 
             if checker.any_enabled(&[
                 Rule::SysVersionSlice3,
+                Rule::SysVersionSlice4,
+                Rule::SysVersionSlice5,
                 Rule::SysVersion2,
                 Rule::SysVersion0,
                 Rule::SysVersionSlice1,

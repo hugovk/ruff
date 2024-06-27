@@ -443,6 +443,8 @@ pub fn code_to_rule(linter: Linter, code: &str) -> Option<(RuleGroup, Rule)> {
         (Flake82020, "301") => (RuleGroup::Stable, rules::flake8_2020::rules::SysVersion0),
         (Flake82020, "302") => (RuleGroup::Stable, rules::flake8_2020::rules::SysVersionCmpStr10),
         (Flake82020, "303") => (RuleGroup::Stable, rules::flake8_2020::rules::SysVersionSlice1),
+        (Flake82020, "401") => (RuleGroup::Stable, rules::flake8_2020::rules::SysVersionSlice4),
+        (Flake82020, "501") => (RuleGroup::Stable, rules::flake8_2020::rules::SysVersionSlice5),
 
         // flake8-simplify
         (Flake8Simplify, "101") => (RuleGroup::Stable, rules::flake8_simplify::rules::DuplicateIsinstanceCall),
